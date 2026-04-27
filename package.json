@@ -1,0 +1,17 @@
+{
+  "name": "clase-8",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "mongoose": "9.4.1",
+    "mysql2": "^3.22.3"
+  }
+}
