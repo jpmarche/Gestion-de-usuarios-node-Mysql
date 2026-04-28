@@ -6,6 +6,8 @@ const getUsers = async () => {
   return response
 }
 
+// FUNCION PARA VALIDAR LOS DATOS INGRESADOS POR EL USUARIO
+
 const checkUser = (username, email, password) => {
   // VALIDAR SI EL USUARIO INGRESA TODOS LOS CAMPOS
   if (!username || !email || !password) {
@@ -24,9 +26,10 @@ const checkUser = (username, email, password) => {
   }  
 }
 
-const checkUserName = async (username) => {
 
-// VALIDAR SI EL USERNAME EXISTE
+// FUNCION PARA VALIDAR SI EL USERNAME ESTA REGISTRADO
+
+const checkUserName = async (username) => {
 
   const query2 = `SELECT * FROM users WHERE username=?`
   const [response2] = await db.query(query2,[username])           
@@ -34,10 +37,9 @@ const checkUserName = async (username) => {
     return "El username ya existe"
   } 
 }
-//  VALIDAR SI EL CORREO EXISTE
+// FUNCION PARA VALIDAR SI EL CORREO ESTA REGISTRADO
 
   const checkEmail = async (email) => {
-      // VALIDAR SI EL EMAIL EXISTE
   const query = `SELECT * FROM users WHERE email=?`
   const [response1] = await db.query(query,[email])
   if (response1.length > 0){
@@ -45,10 +47,11 @@ const checkUserName = async (username) => {
   } 
  }
 
-// CREAR USUARIO
+// FUNCION PARA CREAR USUARIO
 const createUser = async (username, email, password) => {
 
   // VALIDAR DATOS INGRESADOS POR EL USUARIO
+
   const validation = checkUser(username, email, password)
   if (validation) {
     return validation
@@ -65,6 +68,7 @@ const createUser = async (username, email, password) => {
   }
 
   // CREAR USUARIO
+
     const q = `INSERT INTO users (id, username, email, password) VALUES (?,?,?,?)`
   const [response] = await db.query(q, [crypto.randomUUID(), username, email, password])
 
@@ -73,7 +77,10 @@ const createUser = async (username, email, password) => {
   }
 }
 
+// FUNCION PARA ACTUALIZAR USUARIO
+
 const updateUser = async (id, updates) => {
+
   // VALIDAR SI USUARIO INGRESA ID
   if (!id) {
         return "ID requerido"
@@ -83,6 +90,7 @@ const updateUser = async (id, updates) => {
   const [response1] = await db.query(query,[id])
 
   // VALIDAR SI EL USUARIO EXISTE
+
   if (response1.length === 0){
     return "Usuario no encontrado"
   }
@@ -90,7 +98,8 @@ const updateUser = async (id, updates) => {
   let {username, email, password} = updates
 
 // VALIDAR SI EL USUARIO Y EL EMAIL INGRESADO ES DISTINTO AL QUE EXISTIA, SI ES ASI VALIDAR QUE NO ESTE REGISTRADO
-  let validation2
+
+let validation2
   let validation3
   
   if(username && username !== response1[0].username){
@@ -106,8 +115,7 @@ const updateUser = async (id, updates) => {
   if (validation3) {
     return validation3
   }
-       
-  
+         
   // VALIDAR SI EL USUARIO INGRESA UN CAMPO VACIO O NINGUN VALOR, EN ESE CASO SE MANTIENE EL VALOR ANTERIOR
   
   if(username==null || username==""){ 
@@ -121,22 +129,26 @@ const updateUser = async (id, updates) => {
   }
 
 // VALIDAR DATOS INGRESADOS POR EL USUARIO
+  
   const validation = checkUser(username, email, password) 
-  if (validation) {
+    if (validation) {
     return validation
-  } 
+    } 
 
 
 // ACTUALIZAR USUARIO
-   const q = `UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?`
-   const [response] = await db.query(q, [username, email, password, id])
+   
+  const q = `UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?`
+  const [response] = await db.query(q, [username, email, password, id])
 
-    return "Usuario actualizado exitosamente";
+  return "Usuario actualizado exitosamente";
 }
+// FUNCION PARA ELIMINAR USUARIO
 
 const deleteUser = async (id) => {
 
-    // VALIDAR SI USUARIO INGRESA ID
+  // VALIDAR SI USUARIO INGRESA ID
+
   if (!id) {
         return "ID requerido"
     }
@@ -145,10 +157,12 @@ const deleteUser = async (id) => {
   const [response] = await db.query(q, [id]);
     
     // COMPROBAR SI EL USUARIO EXISTE
+
     if (response.affectedRows === 0) {
         return "Usuario no encontrado"
     }
     // COMPROBAR SI EL USUARIO FUE ELIMINADO
+
     if (response.serverStatus === 2) {
         return "Usuario eliminado"
     }
