@@ -25,9 +25,9 @@ const checkUser = (username, email, password) => {
 }
 
 const createUser = async (username, email, password) => {
-  const validacion = checkUser(username, email, password)
-  if (validacion) {
-    return validacion
+  const validation = checkUser(username, email, password)
+  if (validation) {
+    return validation
   }
     // VALIDAR SI EL EMAIL EXISTE
   const query = `SELECT * FROM users WHERE email=?`
@@ -39,12 +39,12 @@ const createUser = async (username, email, password) => {
   // VALIDAR SI EL USERNAME EXISTE
   const query2 = `SELECT * FROM users WHERE username=?`
   const [response2] = await db.query(query2,username)           
-  const q = `INSERT INTO users (id, username, email, password) VALUES (?,?,?,?)`  
   if (response2.length > 0){
     return "El username ya existe"
   } 
 
   // CREAR USUARIO
+    const q = `INSERT INTO users (id, username, email, password) VALUES (?,?,?,?)`
   const [response] = await db.query(q, [crypto.randomUUID(), username, email, password])
 
   if (response.serverStatus === 2) {
@@ -82,9 +82,9 @@ const updateUser = async (id, updates) => {
   }
 
 // VALIDAR DATOS INGRESADOS POR EL USUARIO
-  const validacion = checkUser(username, email, password) 
-if (validacion) {
-    return validacion
+  const validation = checkUser(username, email, password) 
+  if (validation) {
+    return validation
   } 
 
 
